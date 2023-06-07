@@ -1,0 +1,3 @@
+function RecordAudio() {
+    return null;
+}

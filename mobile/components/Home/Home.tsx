@@ -1,7 +1,7 @@
 import { Text } from "react-native";
 import { Box, Button, Center, NativeBaseProvider, VStack, Divider, HStack, Avatar, Heading, ScrollView } from "native-base";
 import { useState } from "react";
-import LiveAudioStream from 'react-native-live-audio-stream';
+import { StackNavigationProp } from '@react-navigation/stack';
 import SpeakerCard from "../SpeakerCard/SpeakerCard";
 import avatar1 from '../../assets/avatars/a1.jpg';
 import avatar2 from '../../assets/avatars/a2.jpg';
@@ -34,7 +34,21 @@ const speakers = [
 ]
 
 
-function Home (){
+type RootStackParamList = {
+    Home: undefined;
+    Details: { itemId: number };
+  };
+  
+  type NavigationProp = StackNavigationProp<
+    RootStackParamList,
+    'Home'
+  >;
+  
+  interface HomeScreenProps {
+    navigation: NavigationProp;
+  }
+
+function Home ({navigation}: HomeScreenProps){
     const [selectedCard, setSelectedCard] = useState<number>();
     const [showStartButton, setShowStartButton] = useState<boolean>(false);
 
@@ -58,7 +72,11 @@ function Home (){
                 </ScrollView>
                 {
                     showStartButton && (
-                        <Button>
+                        <Button
+                            onPress={() => {
+                                navigation.navigate('Home1')
+                            }}
+                            >
                             Zacznij przemówienie!
                         </Button>
                     )
