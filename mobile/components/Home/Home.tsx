@@ -1,44 +1,68 @@
 import { Text } from "react-native";
-import { Box, Button, Center, NativeBaseProvider } from "native-base";
+import { Box, Button, Center, NativeBaseProvider, VStack, Divider, HStack, Avatar, Heading, ScrollView } from "native-base";
 import { useState } from "react";
 import LiveAudioStream from 'react-native-live-audio-stream';
+import SpeakerCard from "../SpeakerCard/SpeakerCard";
+import avatar1 from '../../assets/avatars/a1.jpg';
+import avatar2 from '../../assets/avatars/a2.jpg';
+import avatar3 from '../../assets/avatars/a3.jpg';
+import avatar4 from '../../assets/avatars/a4.jpg';
 
-const options = {
-    sampleRate: 32000,  // default is 44100 but 32000 is adequate for accurate voice recognition
-    channels: 1,        // 1 or 2, default 1
-    bitsPerSample: 16,  // 8 or 16, default 16
-    audioSource: 6,     // android only (see below)
-    bufferSize: 4096    // default is 2048
-  };
+
+const speakers = [
+    {
+        name: 'Barack Obama',
+        description: 'Former President of the United States',
+        avatarSrc: avatar3,
+    },
+    {
+        name: 'Donald Trump',
+        description: 'Former President of the United States',
+        avatarSrc: avatar4,
+    },
+    {
+        name: 'Angela Merkel',
+        description: 'Former Chancellor of Germany',
+        avatarSrc: avatar1,
+    },
+    {
+        name: 'Kononowicz Krzysztof',
+        description: 'Former Mayor of Piotrków Trybunalski',
+        avatarSrc: avatar2,
+        
+    }
+]
 
 
 function Home (){
-    const [record, setRecord] = useState();
+    const [selectedCard, setSelectedCard] = useState<number>();
+    const [showStartButton, setShowStartButton] = useState<boolean>(false);
 
-    LiveAudioStream.init(options);
-    LiveAudioStream.on('data', data => {
-        console.log(data);
-    });
-
-    const startRecording = () => {
-        LiveAudioStream.start();
-    }
-
-    const stopRecording = () => {
-        LiveAudioStream.stop();
-    }
 
     return (
-            <Box safeAreaTop={8}>
-                <Center>
-                    <Text>Home</Text>
-                    <Button
-                        onPress={startRecording}
-                    >Zacznij nagrywać!</Button>
-                    <Button
-                        onPress={stopRecording}
-                    >Zakończ nagrywać!</Button>
+            <Box safeArea={8} flex={'1'} bg={'green.100'} maxH={'100%'}>
+                <Center paddingTop={'8'}>
+                    <Text>Choose the speaker's style!</Text>
                 </Center>
+
+                <ScrollView>
+                { speakers.map((speaker, index) => (
+                    <SpeakerCard
+                        key={index}
+                        name={speaker.name} 
+                        description={speaker.description} 
+                        avatarSrc={speaker.avatarSrc}
+                        showBtn={setShowStartButton}
+                    />
+                ))}
+                </ScrollView>
+                {
+                    showStartButton && (
+                        <Button>
+                            Zacznij przemówienie!
+                        </Button>
+                    )
+                }
             </Box>
     )
 }
